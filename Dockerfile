@@ -1,17 +1,18 @@
 # Use a base image that includes both Python and Node.js, or install them manually
 FROM python:3.12-slim-bookworm
 
-# Install Node.js
+# Install Node.js curl and sqlite
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates gnupg
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 RUN apt-get install -y nodejs
-
-# Install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
+RUN apt-get install sqlite3
 
 # Download and install uv
 ADD https://astral.sh/uv/install.sh /uv-installer.sh
 RUN sh /uv-installer.sh && rm /uv-installer.sh
+
+# install duckdb
+RUN curl install.duckdb.org | sh
 
 # Install FastAPI and Uvicorn
 RUN pip install fastapi uvicorn

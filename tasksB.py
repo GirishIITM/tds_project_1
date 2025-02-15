@@ -1,54 +1,96 @@
 # Phase B: LLM-based Automation Agent for DataWorks Solutions
-
+# /// script
+# dependencies = [
+#   "requests",
+#   "fastapi",
+#   "uvicorn",
+#   "pandas",
+#   "httpx",
+#   "duckdb",
+#   "genai",
+#   "tiktoken"
+# ]
+# ///
 import os
+import pandas as pd
+from fastapi import FastAPI, HTTPException
+from dotenv import load_dotenv
+import requests
+from google import genai
+
+
+load_dotenv()
+
+AIPROXY_TOKEN = os.getenv("AIPROXY_TOKEN")
+
 
 def B12(filepath):
-    if filepath.startswith('/data'):
+    if filepath.startswith("/data"):
         # raise PermissionError("Access outside /data is not allowed.")
         # print("Access outside /data is not allowed.")
         return True
     else:
         return False
 
+
 # B3: Fetch Data from an API
 def B3(url, save_path):
     if not B12(save_path):
         return None
     import requests
+
     response = requests.get(url)
-    with open(save_path, 'w') as file:
+    with open(save_path, "w") as file:
         file.write(response.text)
 
+
 # B4: Clone a Git Repo and Make a Commit
-def clone_git_repo(repo_url, commit_message):
-    import subprocess
-    subprocess.run(["git", "clone", repo_url, "/data/repo"])
-    subprocess.run(["git", "-C", "/data/repo", "commit", "-m", commit_message])
+def B4(repo_url, commit_message):
+    import subprocess, os
+
+    repo_path = "/data/repo"
+    subprocess.run(["git", "clone", repo_url, repo_path])
+    subprocess.run(["git", "-C", repo_path, "add", "."])  # Stage all changes
+    subprocess.run(["git", "-C", repo_path, "commit", "-m", commit_message])
+
 
 # B5: Run SQL Query
 def B5(db_path, query, output_filename):
-    if not B12(db_path):
+    if not B12(db_path) or not B12(output_filename):
         return None
-    import sqlite3, duckdb
-    conn = sqlite3.connect(db_path) if db_path.endswith('.db') else duckdb.connect(db_path)
-    cur = conn.cursor()
-    cur.execute(query)
-    result = cur.fetchall()
+    if db_path.endswith(".db"):
+        import sqlite3
+
+        conn = sqlite3.connect(db_path)
+    elif db_path.endswith(".duckdb"):
+        import duckdb
+
+        conn = duckdb.connect(db_path)
+    else:
+        raise ValueError("Unsupported database type")
+
+    cur = conn.cursor() if hasattr(conn, "cursor") else conn
+    result = cur.execute(query).fetchall()
     conn.close()
-    with open(output_filename, 'w') as file:
+
+    with open(output_filename, "w") as file:
         file.write(str(result))
     return result
+
 
 # B6: Web Scraping
 def B6(url, output_filename):
     import requests
+
     result = requests.get(url).text
-    with open(output_filename, 'w') as file:
+    with open(output_filename, "w") as file:
         file.write(str(result))
+
 
 # B7: Image Processing
 def B7(image_path, output_path, resize=None):
     from PIL import Image
+
     if not B12(image_path):
         return None
     if not B12(output_path):
@@ -59,24 +101,39 @@ def B7(image_path, output_path, resize=None):
     img.save(output_path)
 
 # B8: Audio Transcription
-# def B8(audio_path):
-#     import openai
-#     if not B12(audio_path):
-#         return None
-#     with open(audio_path, 'rb') as audio_file:
-#         return openai.Audio.transcribe("whisper-1", audio_file)
+def B8(audio_path):
+
+    geminiKey = "AIzaSyAv8D5HQwcc1w6mtHyhzQZS82u_myxYCo4"
+    os.environ["GOOGLE_API_KEY"] = geminiKey
+
+    client = genai.Client()
+
+    myfile = client.files.upload(file=audio_path)
+
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=[
+            "Describe this audio clip",
+            myfile,
+        ],
+    )
+
+    print(response.text)
+
 
 # B9: Markdown to HTML Conversion
 def B9(md_path, output_path):
     import markdown
+
     if not B12(md_path):
         return None
     if not B12(output_path):
         return None
-    with open(md_path, 'r') as file:
+    with open(md_path, "r") as file:
         html = markdown.markdown(file.read())
-    with open(output_path, 'w') as file:
+    with open(output_path, "w") as file:
         file.write(html)
+
 
 # B10: API Endpoint for CSV Filtering
 # from flask import Flask, request, jsonify

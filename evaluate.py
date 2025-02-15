@@ -103,7 +103,7 @@ Format the contents of `{file}` using `prettier@3.4.2`, updating the file in-pla
 async def a3(email, **kwargs):
     dates = get_dates(email)
     await run(
-        "The file `/data/dates.txt` contains a list of dates, one per line. Count the number of Wednesdays in the list, and write just the number to `/data/dates-wednesdays.txt`"
+        "Write the # of Thursdays in /data/extracts.txt into /data/extracts-count.txt"
     )
     result = await read("/data/dates-wednesdays.txt")
     expected = sum(1 for date in dates if parse(date).weekday() == 2)
