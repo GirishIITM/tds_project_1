@@ -1,22 +1,8 @@
-# Phase B: LLM-based Automation Agent for DataWorks Solutions
-# /// script
-# dependencies = [
-#   "requests",
-#   "fastapi",
-#   "uvicorn",
-#   "pandas",
-#   "httpx",
-#   "duckdb",
-#   "genai",
-#   "tiktoken"
-# ]
-# ///
 import os
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from dotenv import load_dotenv
 import requests
-from google import genai
 
 
 load_dotenv()
@@ -100,25 +86,11 @@ def B7(image_path, output_path, resize=None):
         img = img.resize(resize)
     img.save(output_path)
 
+
 # B8: Audio Transcription
 def B8(audio_path):
 
-    geminiKey = "AIzaSyAv8D5HQwcc1w6mtHyhzQZS82u_myxYCo4"
-    os.environ["GOOGLE_API_KEY"] = geminiKey
-
-    client = genai.Client()
-
-    myfile = client.files.upload(file=audio_path)
-
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=[
-            "Describe this audio clip",
-            myfile,
-        ],
-    )
-
-    print(response.text)
+    print("audio_path", audio_path)
 
 
 # B9: Markdown to HTML Conversion

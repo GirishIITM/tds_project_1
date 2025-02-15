@@ -1,3 +1,4 @@
+# app.py
 # /// script
 # dependencies = [
 #   "requests",
@@ -77,16 +78,12 @@ load_dotenv()
 #     else:
 #         return JSONResponse(content={"error": "Failed to get response", "details": response.text}, status_code=response.status_code)
 
-
 @app.get("/ask")
 def ask(prompt: str):
     result = get_completions(prompt)
     return result
 
-
-openai_api_chat = (
-    "http://aiproxy.sanand.workers.dev/openai/v1/chat/completions"  # for testing
-)
+openai_api_chat  = "http://aiproxy.sanand.workers.dev/openai/v1/chat/completions" # for testing
 openai_api_key = os.getenv("AIPROXY_TOKEN")
 
 headers = {
@@ -105,8 +102,8 @@ function_definitions_llm = [
                 # "targetfile": {"type": "string", "pattern": r".*/(.*\.py)"},
                 "email": {"type": "string", "pattern": r"[\w\.-]+@[\w\.-]+\.\w+"}
             },
-            "required": ["filename", "targetfile", "email"],
-        },
+            "required": ["filename", "targetfile", "email"]
+        }
     },
     {
         "name": "A2",
@@ -114,14 +111,11 @@ function_definitions_llm = [
         "parameters": {
             "type": "object",
             "properties": {
-                "prettier_version": {
-                    "type": "string",
-                    "pattern": r"prettier@\d+\.\d+\.\d+",
-                },
-                "filename": {"type": "string", "pattern": r".*/(.*\.md)"},
+                "prettier_version": {"type": "string", "pattern": r"prettier@\d+\.\d+\.\d+"},
+                "filename": {"type": "string", "pattern": r".*/(.*\.md)"}
             },
-            "required": ["prettier_version", "filename"],
-        },
+            "required": ["prettier_version", "filename"]
+        }
     },
     {
         "name": "A3",
@@ -131,13 +125,10 @@ function_definitions_llm = [
             "properties": {
                 "filename": {"type": "string", "pattern": r"/data/.*dates.*\.txt"},
                 "targetfile": {"type": "string", "pattern": r"/data/.*/(.*\.txt)"},
-                "weekday": {
-                    "type": "integer",
-                    "pattern": r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)",
-                },
+                "weekday": {"type": "integer", "pattern": r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)"}
             },
-            "required": ["filename", "targetfile", "weekday"],
-        },
+            "required": ["filename", "targetfile", "weekday"]
+        }
     },
     {
         "name": "A4",
@@ -152,10 +143,10 @@ function_definitions_llm = [
                 "targetfile": {
                     "type": "string",
                     "pattern": r".*/(.*\.json)",
-                },
+                }
             },
-            "required": ["filename", "targetfile"],
-        },
+            "required": ["filename", "targetfile"]
+        }
     },
     {
         "name": "A5",
@@ -166,17 +157,21 @@ function_definitions_llm = [
                 "log_dir_path": {
                     "type": "string",
                     "pattern": r".*/logs",
-                    "default": "/data/logs",
+                    "default": "/data/logs"
                 },
                 "output_file_path": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "default": "/data/logs-recent.txt",
+                    "default": "/data/logs-recent.txt"
                 },
-                "num_files": {"type": "integer", "minimum": 1, "default": 10},
+                "num_files": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 10
+                }
             },
-            "required": ["log_dir_path", "output_file_path", "num_files"],
-        },
+            "required": ["log_dir_path", "output_file_path", "num_files"]
+        }
     },
     {
         "name": "A6",
@@ -187,16 +182,16 @@ function_definitions_llm = [
                 "doc_dir_path": {
                     "type": "string",
                     "pattern": r".*/docs",
-                    "default": "/data/docs",
+                    "default": "/data/docs"
                 },
                 "output_file_path": {
                     "type": "string",
                     "pattern": r".*/(.*\.json)",
-                    "default": "/data/docs/index.json",
-                },
+                    "default": "/data/docs/index.json"
+                }
             },
-            "required": ["doc_dir_path", "output_file_path"],
-        },
+            "required": ["doc_dir_path", "output_file_path"]
+        }
     },
     {
         "name": "A7",
@@ -207,16 +202,16 @@ function_definitions_llm = [
                 "filename": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "default": "/data/email.txt",
+                    "default": "/data/email.txt"
                 },
                 "output_file": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "default": "/data/email-sender.txt",
-                },
+                    "default": "/data/email-sender.txt"
+                }
             },
-            "required": ["filename", "output_file"],
-        },
+            "required": ["filename", "output_file"]
+        }
     },
     {
         "name": "A8",
@@ -227,16 +222,16 @@ function_definitions_llm = [
                 "filename": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "default": "/data/credit-card.txt",
+                    "default": "/data/credit-card.txt"
                 },
                 "image_path": {
                     "type": "string",
                     "pattern": r".*/(.*\.png)",
-                    "default": "/data/credit-card.png",
-                },
+                    "default": "/data/credit-card.png"
+                }
             },
-            "required": ["filename", "image_path"],
-        },
+            "required": ["filename", "image_path"]
+        }
     },
     {
         "name": "A9",
@@ -247,16 +242,16 @@ function_definitions_llm = [
                 "filename": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "default": "/data/comments.txt",
+                    "default": "/data/comments.txt"
                 },
                 "output_filename": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "default": "/data/comments-similar.txt",
-                },
+                    "default": "/data/comments-similar.txt"
+                }
             },
-            "required": ["filename", "output_filename"],
-        },
+            "required": ["filename", "output_filename"]
+        }
     },
     {
         "name": "A10",
@@ -267,20 +262,20 @@ function_definitions_llm = [
                 "filename": {
                     "type": "string",
                     "pattern": r".*/(.*\.db)",
-                    "default": "/data/ticket-sales.db",
+                    "default": "/data/ticket-sales.db"
                 },
                 "output_filename": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "default": "/data/ticket-sales-gold.txt",
+                    "default": "/data/ticket-sales-gold.txt"
                 },
                 "query": {
                     "type": "string",
-                    "pattern": "SELECT SUM(units * price) FROM tickets WHERE type = 'Gold'",
-                },
+                    "pattern": "SELECT SUM(units * price) FROM tickets WHERE type = 'Gold'"
+                }
             },
-            "required": ["filename", "output_filename", "query"],
-        },
+            "required": ["filename", "output_filename", "query"]
+        }
     },
     {
         "name": "B12",
@@ -294,8 +289,8 @@ function_definitions_llm = [
                     # "description": "Filepath must start with /data to ensure secure access."
                 }
             },
-            "required": ["filepath"],
-        },
+            "required": ["filepath"]
+        }
     },
     {
         "name": "B3",
@@ -306,16 +301,16 @@ function_definitions_llm = [
                 "url": {
                     "type": "string",
                     "pattern": r"https?://.*",
-                    "description": "URL to download content from.",
+                    "description": "URL to download content from."
                 },
                 "save_path": {
                     "type": "string",
                     "pattern": r".*/.*",
-                    "description": "Path to save the downloaded content.",
-                },
+                    "description": "Path to save the downloaded content."
+                }
             },
-            "required": ["url", "save_path"],
-        },
+            "required": ["url", "save_path"]
+        }
     },
     {
         "name": "B5",
@@ -326,20 +321,20 @@ function_definitions_llm = [
                 "db_path": {
                     "type": "string",
                     "pattern": r".*/(.*\.db)",
-                    "description": "Path to the SQLite database file.",
+                    "description": "Path to the SQLite database file."
                 },
                 "query": {
                     "type": "string",
-                    "description": "SQL query to be executed on the database.",
+                    "description": "SQL query to be executed on the database."
                 },
                 "output_filename": {
                     "type": "string",
                     "pattern": r".*/(.*\.txt)",
-                    "description": "Path to the file where the query result will be saved.",
-                },
+                    "description": "Path to the file where the query result will be saved."
+                }
             },
-            "required": ["db_path", "query", "output_filename"],
-        },
+            "required": ["db_path", "query", "output_filename"]
+        }
     },
     {
         "name": "B6",
@@ -350,16 +345,16 @@ function_definitions_llm = [
                 "url": {
                     "type": "string",
                     "pattern": r"https?://.*",
-                    "description": "URL to fetch content from.",
+                    "description": "URL to fetch content from."
                 },
                 "output_filename": {
                     "type": "string",
                     "pattern": r".*/.*",
-                    "description": "Path to the file where the content will be saved.",
-                },
+                    "description": "Path to the file where the content will be saved."
+                }
             },
-            "required": ["url", "output_filename"],
-        },
+            "required": ["url", "output_filename"]
+        }
     },
     {
         "name": "B7",
@@ -370,23 +365,26 @@ function_definitions_llm = [
                 "image_path": {
                     "type": "string",
                     "pattern": r".*/(.*\.(jpg|jpeg|png|gif|bmp))",
-                    "description": "Path to the input image file.",
+                    "description": "Path to the input image file."
                 },
                 "output_path": {
                     "type": "string",
                     "pattern": r".*/.*",
-                    "description": "Path to save the processed image.",
+                    "description": "Path to save the processed image."
                 },
                 "resize": {
                     "type": "array",
-                    "items": {"type": "integer", "minimum": 1},
+                    "items": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
                     "minItems": 2,
                     "maxItems": 2,
-                    "description": "Optional. Resize dimensions as [width, height].",
-                },
+                    "description": "Optional. Resize dimensions as [width, height]."
+                }
             },
-            "required": ["image_path", "output_path"],
-        },
+            "required": ["image_path", "output_path"]
+        }
     },
     {
         "name": "B9",
@@ -397,62 +395,44 @@ function_definitions_llm = [
                 "md_path": {
                     "type": "string",
                     "pattern": r".*/(.*\.md)",
-                    "description": "Path to the Markdown file to be converted.",
+                    "description": "Path to the Markdown file to be converted."
                 },
                 "output_path": {
                     "type": "string",
                     "pattern": r".*/.*",
-                    "description": "Path where the converted file will be saved.",
-                },
+                    "description": "Path where the converted file will be saved."
+                }
             },
-            "required": ["md_path", "output_path"],
-        },
-    },
+            "required": ["md_path", "output_path"]
+        }
+    }
+
 ]
 
-
-class TaskError(Exception):
-    """Custom exception for errors related to the task."""
-
-    def __init__(self, message: str):
-        self.message = message
-        super().__init__(self.message)
-
-
-class AgentError(Exception):
-    """Custom exception for errors related to the agent."""
-
-    def __init__(self, message: str):
-        self.message = message
-        super().__init__(self.message)
-
-
 def get_completions(prompt: str):
-    try:
-        with httpx.Client(timeout=20) as client:
-            response = client.post(
-                f"{openai_api_chat}",
-                headers=headers,
-                json={
+    with httpx.Client(timeout=20) as client:
+        response = client.post(
+            f"{openai_api_chat}",
+            headers=headers,
+            json=
+                {
                     "model": "gpt-4o-mini",
                     "messages": [
-                        {
-                            "role": "system",
-                            "content": "You are a function classifier that extracts structured parameters from queries.",
-                        },
-                        {"role": "user", "content": prompt},
-                    ],
+                                    {"role": "system", "content": "You are a function classifier that extracts structured parameters from queries."},
+                                    {"role": "user", "content": prompt}
+                                ],
                     "tools": [
-                        {"type": "function", "function": function}
-                        for function in function_definitions_llm
-                    ],
-                    "tool_choice": "auto",
+                                {
+                                    "type": "function",
+                                    "function": function
+                                } for function in function_definitions_llm
+                            ],
+                    "tool_choice": "auto"
                 },
-            )
-        print(response.json()["choices"][0]["message"]["tool_calls"][0]["function"])
-        return response.json()["choices"][0]["message"]["tool_calls"][0]["function"]
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error in get_completions: {str(e)}")
+        )
+    # return response.json()
+    print(response.json()["choices"][0]["message"]["tool_calls"][0]["function"])
+    return response.json()["choices"][0]["message"]["tool_calls"][0]["function"]
 
 
 # Placeholder for task execution
@@ -465,31 +445,32 @@ async def run_task(task: str):
         # llm_response = function_calling(tast), function_name = A1
         response = get_completions(task)
         print(response)
-        task_code = response["name"]
-        arguments = response["arguments"]
+        task_code = response['name']
+        arguments = response['arguments']
 
-        if "A1" == task_code:
+        if "A1"== task_code:
             A1(**json.loads(arguments))
-        if "A2" == task_code:
+        if "A2"== task_code:
             A2(**json.loads(arguments))
-        if "A3" == task_code:
+        if "A3"== task_code:
             A3(**json.loads(arguments))
-        if "A4" == task_code:
+        if "A4"== task_code:
             A4(**json.loads(arguments))
-        if "A5" == task_code:
+        if "A5"== task_code:
             A5(**json.loads(arguments))
-        if "A6" == task_code:
+        if "A6"== task_code:
             A6(**json.loads(arguments))
-        if "A7" == task_code:
+        if "A7"== task_code:
             A7(**json.loads(arguments))
-        if "A8" == task_code:
+        if "A8"== task_code:
             A8(**json.loads(arguments))
-        if "A9" == task_code:
+        if "A9"== task_code:
             A9(**json.loads(arguments))
-        if "A10" == task_code:
+        if "A10"== task_code:
             A10(**json.loads(arguments))
 
-        if "B12" == task_code:
+
+        if "B12"== task_code:
             B12(**json.loads(arguments))
         if "B3" == task_code:
             B3(**json.loads(arguments))
@@ -501,16 +482,9 @@ async def run_task(task: str):
             B7(**json.loads(arguments))
         if "B9" == task_code:
             B9(**json.loads(arguments))
-
         return {"message": f"{task_code} Task '{task}' executed successfully"}
-    except TaskError as e:  # Custom error class for task-related issues
-        raise HTTPException(status_code=400, detail=f"Task error: {str(e)}")
-    except AgentError as e:  # Custom error class for agent-related issues
-        raise HTTPException(status_code=500, detail=f"Agent error: {str(e)}")
     except Exception as e:
-        # General fallback for other unexpected errors
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
-
+        raise HTTPException(status_code=400, detail=str(e))
 
 # Placeholder for file reading
 @app.get("/read", response_class=PlainTextResponse)
@@ -523,8 +497,6 @@ async def read_file(path: str = Query(..., description="File path to read")):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="0.0.0.0", port=8000)
