@@ -1,6 +1,5 @@
 # Phase B: LLM-based Automation Agent for DataWorks Solutions
 
-# B1 & B2: Security Checks
 import os
 
 def B12(filepath):
@@ -21,10 +20,10 @@ def B3(url, save_path):
         file.write(response.text)
 
 # B4: Clone a Git Repo and Make a Commit
-# def clone_git_repo(repo_url, commit_message):
-#     import subprocess
-#     subprocess.run(["git", "clone", repo_url, "/data/repo"])
-#     subprocess.run(["git", "-C", "/data/repo", "commit", "-m", commit_message])
+def clone_git_repo(repo_url, commit_message):
+    import subprocess
+    subprocess.run(["git", "clone", repo_url, "/data/repo"])
+    subprocess.run(["git", "-C", "/data/repo", "commit", "-m", commit_message])
 
 # B5: Run SQL Query
 def B5(db_path, query, output_filename):

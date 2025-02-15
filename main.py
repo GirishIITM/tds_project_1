@@ -410,43 +410,49 @@ function_definitions_llm = [
     },
 ]
 
+
 class TaskError(Exception):
     """Custom exception for errors related to the task."""
+
     def __init__(self, message: str):
         self.message = message
         super().__init__(self.message)
 
+
 class AgentError(Exception):
     """Custom exception for errors related to the agent."""
+
     def __init__(self, message: str):
         self.message = message
         super().__init__(self.message)
 
 
 def get_completions(prompt: str):
-    with httpx.Client(timeout=20) as client:
-        response = client.post(
-            f"{openai_api_chat}",
-            headers=headers,
-            json={
-                "model": "gpt-4o-mini",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "You are a function classifier that extracts structured parameters from queries.",
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-                "tools": [
-                    {"type": "function", "function": function}
-                    for function in function_definitions_llm
-                ],
-                "tool_choice": "auto",
-            },
-        )
-    # return response.json()
-    print(response.json()["choices"][0]["message"]["tool_calls"][0]["function"])
-    return response.json()["choices"][0]["message"]["tool_calls"][0]["function"]
+    try:
+        with httpx.Client(timeout=20) as client:
+            response = client.post(
+                f"{openai_api_chat}",
+                headers=headers,
+                json={
+                    "model": "gpt-4o-mini",
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": "You are a function classifier that extracts structured parameters from queries.",
+                        },
+                        {"role": "user", "content": prompt},
+                    ],
+                    "tools": [
+                        {"type": "function", "function": function}
+                        for function in function_definitions_llm
+                    ],
+                    "tool_choice": "auto",
+                },
+            )
+        print(response.json()["choices"][0]["message"]["tool_calls"][0]["function"])
+        return response.json()["choices"][0]["message"]["tool_calls"][0]["function"]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in get_completions: {str(e)}")
 
 
 # Placeholder for task execution
@@ -495,7 +501,7 @@ async def run_task(task: str):
             B7(**json.loads(arguments))
         if "B9" == task_code:
             B9(**json.loads(arguments))
-       
+
         return {"message": f"{task_code} Task '{task}' executed successfully"}
     except TaskError as e:  # Custom error class for task-related issues
         raise HTTPException(status_code=400, detail=f"Task error: {str(e)}")
